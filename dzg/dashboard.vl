@@ -1,0 +1,417 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": {
+    "text": "Oral Disease and Risk Indicators Dashboard",
+    "anchor": "start",
+    "fontSize": 22,
+    "offset": 12
+  },
+  "padding": 12,
+  "vconcat": [
+    {
+      "spacing": 24,
+      "hconcat": [
+        {
+          "title": "Prevalence by Country",
+          "width": 650,
+          "height": 390,
+          "data": {
+            "url": "countries_data.json",
+            "format": {
+              "type": "topojson",
+              "feature": "1"
+            }
+          },
+          "projection": {
+            "type": "mercator",
+            "center": [100, 20],
+            "scale": 410
+          },
+          "transform": [
+            {
+              "calculate": "datum.properties.NAME == 'North Korea' ? 'Democratic People\\u2019s Republic of Korea' : datum.properties.NAME",
+              "as": "CountryLookupName"
+            },
+            {
+              "lookup": "CountryLookupName",
+              "from": {
+                "data": {
+                  "url": "countries_data.csv"
+                },
+                "key": "ISO_A3",
+                "fields": ["Region", "Prevalence"]
+              }
+            },
+            {
+              "calculate": "toNumber(datum.Prevalence)",
+              "as": "PrevalenceValue"
+            }
+          ],
+          "layer": [
+            {
+              "mark": {
+                "type": "geoshape",
+                "fill": "#e6e6e6",
+                "stroke": "#ffffff",
+                "strokeWidth": 0.6
+              }
+            },
+            {
+              "transform": [
+                {
+                  "filter": "isValid(datum.PrevalenceValue)"
+                }
+              ],
+              "mark": {
+                "type": "geoshape",
+                "stroke": "#ffffff",
+                "strokeWidth": 0.7
+              },
+              "encoding": {
+                "color": {
+                  "field": "PrevalenceValue",
+                  "type": "quantitative",
+                  "title": "Prevalence",
+                  "scale": {
+                    "scheme": "orangered"
+                  },
+                  "legend": {
+                    "orient": "bottom"
+                  }
+                },
+                "tooltip": [
+                  {
+                    "field": "properties.NAME",
+                    "type": "nominal",
+                    "title": "Country"
+                  },
+                  {
+                    "field": "Region",
+                    "type": "nominal"
+                  },
+                  {
+                    "field": "PrevalenceValue",
+                    "type": "quantitative",
+                    "title": "Prevalence",
+                    "format": ".1f"
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "width": 300,
+          "height": 390,
+          "data": {
+            "values": [{"start": 0, "end": 1}]
+          },
+          "mark": {
+            "type": "rect",
+            "fill": "#fafafa",
+            "stroke": "#d8d8d8",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "x2": {"field": "end"},
+            "y": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "y2": {"field": "end"}
+          }
+        }
+      ]
+    },
+    {
+      "spacing": 24,
+      "hconcat": [
+        {
+          "title": "Malaysia Overall Indicators",
+          "width": 650,
+          "height": 320,
+          "data": {
+            "url": "malasyia_data.csv"
+          },
+          "transform": [
+            {
+              "filter": "datum.Group == 'Overall'"
+            },
+            {
+              "calculate": "toNumber(datum['Value (%)'])",
+              "as": "Value"
+            }
+          ],
+          "mark": {
+            "type": "arc",
+            "innerRadius": 70,
+            "outerRadius": 130,
+            "stroke": "#ffffff",
+            "strokeWidth": 2
+          },
+          "encoding": {
+            "theta": {
+              "field": "Value",
+              "type": "quantitative",
+              "stack": true
+            },
+            "color": {
+              "field": "Parameter",
+              "type": "nominal",
+              "legend": {
+                "title": null,
+                "orient": "bottom"
+              },
+              "scale": {
+                "range": ["#d94801", "#f16913", "#fd8d3c", "#fdd0a2"]
+              }
+            },
+            "tooltip": [
+              {
+                "field": "Parameter",
+                "type": "nominal"
+              },
+              {
+                "field": "Group",
+                "type": "nominal"
+              },
+              {
+                "field": "Value",
+                "type": "quantitative",
+                "title": "Value (%)",
+                "format": ".1f"
+              }
+            ]
+          }
+        },
+        {
+          "width": 300,
+          "height": 320,
+          "data": {
+            "values": [{"start": 0, "end": 1}]
+          },
+          "mark": {
+            "type": "rect",
+            "fill": "#fafafa",
+            "stroke": "#d8d8d8",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "x2": {"field": "end"},
+            "y": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "y2": {"field": "end"}
+          }
+        }
+      ]
+    },
+    {
+      "spacing": 24,
+      "hconcat": [
+        {
+          "title": "OML and OPC Prevalence by Quid Chewing Status",
+          "data": {
+            "url": "malasyia_details.csv"
+          },
+          "transform": [
+            {
+              "calculate": "toNumber(datum['Value (%)'])",
+              "as": "Value"
+            },
+            {
+              "calculate": "round(datum.Value)",
+              "as": "FilledCount"
+            },
+            {
+              "calculate": "sequence(1, 101)",
+              "as": "WaffleCells"
+            },
+            {
+              "flatten": ["WaffleCells"],
+              "as": ["Cell"]
+            },
+            {
+              "calculate": "(datum.Cell - 1) % 10",
+              "as": "Column"
+            },
+            {
+              "calculate": "9 - floor((datum.Cell - 1) / 10)",
+              "as": "Row"
+            },
+            {
+              "calculate": "datum.Cell <= datum.FilledCount",
+              "as": "Filled"
+            }
+          ],
+          "facet": {
+            "row": {
+              "field": "Parameter",
+              "type": "nominal",
+              "title": null,
+              "header": {
+                "labelAngle": 0,
+                "labelFontSize": 12,
+                "labelFontWeight": "bold"
+              }
+            },
+            "column": {
+              "field": "Group",
+              "type": "nominal",
+              "title": null,
+              "sort": ["Quid Chewers", "Non-Quid Chewers"],
+              "header": {
+                "labelFontSize": 12,
+                "labelFontWeight": "bold"
+              }
+            }
+          },
+          "spec": {
+            "width": 130,
+            "height": 130,
+            "layer": [
+              {
+                "mark": {
+                  "type": "rect",
+                  "cornerRadius": 2,
+                  "stroke": "#ffffff",
+                  "strokeWidth": 1
+                },
+                "encoding": {
+                  "x": {
+                    "field": "Column",
+                    "type": "ordinal",
+                    "axis": null
+                  },
+                  "y": {
+                    "field": "Row",
+                    "type": "ordinal",
+                    "axis": null
+                  },
+                  "color": {
+                    "condition": {
+                      "test": "datum.Filled",
+                      "field": "Parameter",
+                      "type": "nominal",
+                      "scale": {
+                        "range": ["#d94801", "#3182bd"]
+                      }
+                    },
+                    "value": "#e8e8e8",
+                    "legend": null
+                  },
+                  "tooltip": [
+                    {
+                      "field": "Parameter",
+                      "type": "nominal"
+                    },
+                    {
+                      "field": "Group",
+                      "type": "nominal"
+                    },
+                    {
+                      "field": "Value",
+                      "type": "quantitative",
+                      "title": "Value (%)",
+                      "format": ".1f"
+                    }
+                  ]
+                }
+              },
+              {
+                "transform": [
+                  {
+                    "filter": "datum.Cell == 1"
+                  }
+                ],
+                "mark": {
+                  "type": "text",
+                  "fontSize": 20,
+                  "fontWeight": "bold",
+                  "dy": 84,
+                  "color": "#333333"
+                },
+                "encoding": {
+                  "text": {
+                    "field": "Value",
+                    "type": "quantitative",
+                    "format": ".1f"
+                  }
+                }
+              }
+            ]
+          },
+          "resolve": {
+            "scale": {
+              "x": "independent",
+              "y": "independent"
+            }
+          }
+        },
+        {
+          "width": 300,
+          "height": 350,
+          "data": {
+            "values": [{"start": 0, "end": 1}]
+          },
+          "mark": {
+            "type": "rect",
+            "fill": "#fafafa",
+            "stroke": "#d8d8d8",
+            "strokeWidth": 1
+          },
+          "encoding": {
+            "x": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "x2": {"field": "end"},
+            "y": {
+              "field": "start",
+              "type": "quantitative",
+              "axis": null,
+              "scale": {"domain": [0, 1]}
+            },
+            "y2": {"field": "end"}
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "concat": {
+      "spacing": 36
+    },
+    "axis": {
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}
