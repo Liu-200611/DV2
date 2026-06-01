@@ -1,0 +1,112 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Prevalence by Country",
+  "width": 800,
+  "height": 500,
+  "data": {
+    "url": "countries_data.json",
+    "format": {
+      "type": "topojson",
+      "feature": "1"
+    }
+  },
+  "projection": {
+    "type": "mercator",
+    "center": [100, 20],
+    "scale": 500
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.NAME == 'North Korea' ? 'Democratic People\\u2019s Republic of Korea' : datum.properties.NAME",
+      "as": "CountryLookupName"
+    },
+    {
+      "lookup": "CountryLookupName",
+      "from": {
+        "data": {
+          "url": "countries_data.csv"
+        },
+        "key": "ISO_A3",
+        "fields": ["Region", "Prevalence"]
+      }
+    },
+    {
+      "calculate": "toNumber(datum.Prevalence)",
+      "as": "PrevalenceValue"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "fill": "#e6e6e6",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.6
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "isValid(datum.PrevalenceValue)"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 0.7
+      },
+      "encoding": {
+        "color": {
+          "field": "PrevalenceValue",
+          "type": "quantitative",
+          "title": "Prevalence",
+          "scale": {
+            "scheme": "blues"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.NAME",
+            "type": "nominal",
+            "title": "Country"
+          },
+          {
+            "field": "Region",
+            "type": "nominal"
+          },
+          {
+            "field": "PrevalenceValue",
+            "type": "quantitative",
+            "title": "Prevalence",
+            "format": ".1f"
+          }
+        ]
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

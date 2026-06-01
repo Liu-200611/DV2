@@ -1,0 +1,171 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "OML and OPC Prevalence by Quid Chewing Status",
+  "data": {
+    "url": "malasyia_details.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum['Value (%)'])",
+      "as": "Value"
+    },
+    {
+      "calculate": "round(datum.Value)",
+      "as": "FilledCount"
+    },
+    {
+      "calculate": "sequence(1, 101)",
+      "as": "WaffleCells"
+    },
+    {
+      "flatten": ["WaffleCells"],
+      "as": ["Cell"]
+    },
+    {
+      "calculate": "(datum.Cell - 1) % 10",
+      "as": "Column"
+    },
+    {
+      "calculate": "9 - floor((datum.Cell - 1) / 10)",
+      "as": "Row"
+    },
+    {
+      "calculate": "datum.Cell <= datum.FilledCount",
+      "as": "Filled"
+    }
+  ],
+  "facet": {
+    "row": {
+      "field": "Parameter",
+      "type": "nominal",
+      "title": null,
+      "header": {
+        "labelAngle": 0,
+        "labelFontSize": 13,
+        "labelFontWeight": "bold"
+      }
+    },
+    "column": {
+      "field": "Group",
+      "type": "nominal",
+      "title": null,
+      "sort": ["Quid Chewers", "Non-Quid Chewers"],
+      "header": {
+        "labelFontSize": 13,
+        "labelFontWeight": "bold"
+      }
+    }
+  },
+  "spec": {
+    "width": 160,
+    "height": 160,
+    "layer": [
+      {
+        "mark": {
+          "type": "rect",
+          "cornerRadius": 2,
+          "stroke": "#ffffff",
+          "strokeWidth": 1
+        },
+        "encoding": {
+          "x": {
+            "field": "Column",
+            "type": "ordinal",
+            "axis": null
+          },
+          "y": {
+            "field": "Row",
+            "type": "ordinal",
+            "axis": null
+          },
+          "color": {
+            "condition": {
+              "test": "datum.Filled",
+              "field": "Parameter",
+              "type": "nominal",
+              "scale": {
+                "scheme": "blueorange"
+              }
+            },
+            "value": "#e8e8e8"
+          },
+          "tooltip": [
+            {
+              "field": "Parameter",
+              "type": "nominal"
+            },
+            {
+              "field": "Group",
+              "type": "nominal"
+            },
+            {
+              "field": "Value",
+              "type": "quantitative",
+              "title": "Value (%)",
+              "format": ".1f"
+            }
+          ]
+        }
+      },
+      {
+        "transform": [
+          {
+            "filter": "datum.Cell == 1"
+          }
+        ],
+        "mark": {
+          "type": "text",
+          "fontSize": 22,
+          "fontWeight": "bold",
+          "dy": 100,
+          "color": "#333333"
+        },
+        "encoding": {
+          "text": {
+            "field": "Value",
+            "type": "quantitative",
+            "format": ".1f"
+          }
+        }
+      }
+    ]
+  },
+  "resolve": {
+    "scale": {
+      "x": "independent",
+      "y": "independent"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "concat": {
+      "spacing": 24
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "header": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif"
+    }
+  }
+}

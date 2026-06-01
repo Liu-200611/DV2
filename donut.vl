@@ -1,0 +1,84 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Malaysia Overall Indicators",
+  "width": 420,
+  "height": 420,
+  "data": {
+    "url": "malasyia_data.csv"
+  },
+  "transform": [
+    {
+      "filter": "datum.Group == 'Overall'"
+    },
+    {
+      "calculate": "toNumber(datum['Value (%)'])",
+      "as": "Value"
+    }
+  ],
+  "mark": {
+    "type": "arc",
+    "innerRadius": 80,
+    "outerRadius": 160,
+    "stroke": "#ffffff",
+    "strokeWidth": 2
+  },
+  "encoding": {
+    "theta": {
+      "field": "Value",
+      "type": "quantitative",
+      "stack": true
+    },
+    "color": {
+      "field": "Parameter",
+      "type": "nominal",
+      "legend": {
+        "title": null,
+        "orient": "bottom"
+      },
+      "scale": {
+        "scheme": "blueorange"
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Parameter",
+        "type": "nominal"
+      },
+      {
+        "field": "Group",
+        "type": "nominal"
+      },
+      {
+        "field": "Value",
+        "type": "quantitative",
+        "title": "Value (%)",
+        "format": ".1f"
+      }
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

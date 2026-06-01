@@ -1,0 +1,98 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Prevalence by Gender",
+  "width": 650,
+  "height": 300,
+  "data": {
+    "url": "gender_data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum['Prevalence (%)'])",
+      "as": "Prevalence"
+    },
+    {
+      "calculate": "toNumber(datum['Unweighted Count'])",
+      "as": "UnweightedCount"
+    },
+    {
+      "calculate": "toNumber(datum['Estimated Population'])",
+      "as": "EstimatedPopulation"
+    }
+  ],
+  "mark": {
+    "type": "bar",
+    "size": 34,
+    "cornerRadiusTopLeft": 3,
+    "cornerRadiusTopRight": 3,
+    "color": "#3182bd"
+  },
+  "encoding": {
+    "x": {
+      "field": "Category",
+      "type": "ordinal",
+      "title": "Gender",
+      "sort": ["OVERALL", "Male", "Female"],
+      "axis": {
+        "labelAngle": 0
+      }
+    },
+    "y": {
+      "field": "Prevalence",
+      "type": "quantitative",
+      "title": "Prevalence (%)",
+      "scale": {
+        "zero": true
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Category",
+        "type": "nominal",
+        "title": "Gender"
+      },
+      {
+        "field": "Prevalence",
+        "type": "quantitative",
+        "title": "Prevalence (%)",
+        "format": ".1f"
+      },
+      {
+        "field": "UnweightedCount",
+        "type": "quantitative",
+        "title": "Unweighted Count"
+      },
+      {
+        "field": "EstimatedPopulation",
+        "type": "quantitative",
+        "title": "Estimated Population",
+        "format": ","
+      }
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}
