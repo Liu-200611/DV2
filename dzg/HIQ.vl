@@ -1,0 +1,106 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Prevalence by Household Income Quintile",
+  "width": 650,
+  "height": 320,
+  "data": {
+    "url": "HIQ_data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum['Prevalence (%)'])",
+      "as": "Prevalence"
+    },
+    {
+      "calculate": "toNumber(datum['Unweighted Count'])",
+      "as": "UnweightedCount"
+    },
+    {
+      "calculate": "toNumber(datum['Estimated Population'])",
+      "as": "EstimatedPopulation"
+    }
+  ],
+  "mark": {
+    "type": "line",
+    "point": {
+      "filled": true,
+      "size": 90
+    },
+    "strokeWidth": 3,
+    "color": "#3182bd"
+  },
+  "encoding": {
+    "x": {
+      "field": "Category",
+      "type": "ordinal",
+      "title": "Household Income Quintile",
+      "sort": [
+        "Quintile 1 (20% poorest)",
+        "Quintile 2",
+        "Quintile 3",
+        "Quintile 4",
+        "Quintile 5 (20% richest)"
+      ],
+      "axis": {
+        "labelAngle": -25,
+        "labelLimit": 120
+      }
+    },
+    "y": {
+      "field": "Prevalence",
+      "type": "quantitative",
+      "title": "Prevalence (%)",
+      "scale": {
+        "zero": true
+      }
+    },
+    "tooltip": [
+      {
+        "field": "Category",
+        "type": "nominal"
+      },
+      {
+        "field": "Prevalence",
+        "type": "quantitative",
+        "title": "Prevalence (%)",
+        "format": ".1f"
+      },
+      {
+        "field": "UnweightedCount",
+        "type": "quantitative",
+        "title": "Unweighted Count"
+      },
+      {
+        "field": "EstimatedPopulation",
+        "type": "quantitative",
+        "title": "Estimated Population",
+        "format": ","
+      }
+    ]
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}

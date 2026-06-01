@@ -1,417 +1,1724 @@
-{
-  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "title": {
-    "text": "Oral Disease and Risk Indicators Dashboard",
-    "anchor": "start",
-    "fontSize": 22,
-    "offset": 12
-  },
-  "padding": 12,
-  "vconcat": [
-    {
-      "spacing": 24,
-      "hconcat": [
-        {
-          "title": "Prevalence by Country",
-          "width": 650,
-          "height": 390,
-          "data": {
-            "url": "countries_data.json",
-            "format": {
-              "type": "topojson",
-              "feature": "1"
-            }
-          },
-          "projection": {
-            "type": "mercator",
-            "center": [100, 20],
-            "scale": 410
-          },
-          "transform": [
-            {
-              "calculate": "datum.properties.NAME == 'North Korea' ? 'Democratic People\\u2019s Republic of Korea' : datum.properties.NAME",
-              "as": "CountryLookupName"
-            },
-            {
-              "lookup": "CountryLookupName",
-              "from": {
-                "data": {
-                  "url": "countries_data.csv"
-                },
-                "key": "ISO_A3",
-                "fields": ["Region", "Prevalence"]
-              }
-            },
-            {
-              "calculate": "toNumber(datum.Prevalence)",
-              "as": "PrevalenceValue"
-            }
-          ],
-          "layer": [
-            {
-              "mark": {
-                "type": "geoshape",
-                "fill": "#e6e6e6",
-                "stroke": "#ffffff",
-                "strokeWidth": 0.6
-              }
-            },
-            {
-              "transform": [
-                {
-                  "filter": "isValid(datum.PrevalenceValue)"
-                }
-              ],
-              "mark": {
-                "type": "geoshape",
-                "stroke": "#ffffff",
-                "strokeWidth": 0.7
+﻿{
+    "$schema":  "https://vega.github.io/schema/vega-lite/v5.json",
+    "title":  {
+                  "text":  "The Silent Epidemic: Tobacco, Areca Nut, and the Looming Oral Health Crisis",
+                  "subtitle":  "Regional burden, Malaysia indicators, oral health consequences, and demographic vulnerabilities",
+                  "anchor":  "start",
+                  "fontSize":  24,
+                  "subtitleFontSize":  14,
+                  "offset":  14,
+                  "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                  "color":  "#111111",
+                  "subtitleFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                  "subtitleColor":  "#555555"
               },
-              "encoding": {
-                "color": {
-                  "field": "PrevalenceValue",
-                  "type": "quantitative",
-                  "title": "Prevalence",
-                  "scale": {
-                    "scheme": "orangered"
-                  },
-                  "legend": {
-                    "orient": "bottom"
-                  }
-                },
-                "tooltip": [
-                  {
-                    "field": "properties.NAME",
-                    "type": "nominal",
-                    "title": "Country"
-                  },
-                  {
-                    "field": "Region",
-                    "type": "nominal"
-                  },
-                  {
-                    "field": "PrevalenceValue",
-                    "type": "quantitative",
-                    "title": "Prevalence",
-                    "format": ".1f"
-                  }
-                ]
-              }
-            }
-          ]
-        },
-        {
-          "width": 300,
-          "height": 390,
-          "data": {
-            "values": [{"start": 0, "end": 1}]
-          },
-          "mark": {
-            "type": "rect",
-            "fill": "#fafafa",
-            "stroke": "#d8d8d8",
-            "strokeWidth": 1
-          },
-          "encoding": {
-            "x": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "x2": {"field": "end"},
-            "y": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "y2": {"field": "end"}
-          }
-        }
-      ]
+    "background":  "transparent",
+    "config": {
+      "view": {
+        "fill": "transparent",
+        "stroke": "transparent"
+      },
+      "title": {
+        "color": "#111111"
+      },
+      "axis": {
+        "labelColor": "#333333",
+        "titleColor": "#333333"
+      },
+      "legend": {
+        "labelColor": "#333333",
+        "titleColor": "#333333"
+      },
+      "header": {
+        "labelColor": "#333333",
+        "titleColor": "#333333"
+      }
     },
-    {
-      "spacing": 24,
-      "hconcat": [
-        {
-          "title": "Malaysia Overall Indicators",
-          "width": 650,
-          "height": 320,
-          "data": {
-            "url": "malasyia_data.csv"
-          },
-          "transform": [
-            {
-              "filter": "datum.Group == 'Overall'"
-            },
-            {
-              "calculate": "toNumber(datum['Value (%)'])",
-              "as": "Value"
-            }
-          ],
-          "mark": {
-            "type": "arc",
-            "innerRadius": 70,
-            "outerRadius": 130,
-            "stroke": "#ffffff",
-            "strokeWidth": 2
-          },
-          "encoding": {
-            "theta": {
-              "field": "Value",
-              "type": "quantitative",
-              "stack": true
-            },
-            "color": {
-              "field": "Parameter",
-              "type": "nominal",
-              "legend": {
-                "title": null,
-                "orient": "bottom"
-              },
-              "scale": {
-                "range": ["#d94801", "#f16913", "#fd8d3c", "#fdd0a2"]
-              }
-            },
-            "tooltip": [
-              {
-                "field": "Parameter",
-                "type": "nominal"
-              },
-              {
-                "field": "Group",
-                "type": "nominal"
-              },
-              {
-                "field": "Value",
-                "type": "quantitative",
-                "title": "Value (%)",
-                "format": ".1f"
-              }
-            ]
-          }
-        },
-        {
-          "width": 300,
-          "height": 320,
-          "data": {
-            "values": [{"start": 0, "end": 1}]
-          },
-          "mark": {
-            "type": "rect",
-            "fill": "#fafafa",
-            "stroke": "#d8d8d8",
-            "strokeWidth": 1
-          },
-          "encoding": {
-            "x": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "x2": {"field": "end"},
-            "y": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "y2": {"field": "end"}
-          }
-        }
-      ]
-    },
-    {
-      "spacing": 24,
-      "hconcat": [
-        {
-          "title": "OML and OPC Prevalence by Quid Chewing Status",
-          "data": {
-            "url": "malasyia_details.csv"
-          },
-          "transform": [
-            {
-              "calculate": "toNumber(datum['Value (%)'])",
-              "as": "Value"
-            },
-            {
-              "calculate": "round(datum.Value)",
-              "as": "FilledCount"
-            },
-            {
-              "calculate": "sequence(1, 101)",
-              "as": "WaffleCells"
-            },
-            {
-              "flatten": ["WaffleCells"],
-              "as": ["Cell"]
-            },
-            {
-              "calculate": "(datum.Cell - 1) % 10",
-              "as": "Column"
-            },
-            {
-              "calculate": "9 - floor((datum.Cell - 1) / 10)",
-              "as": "Row"
-            },
-            {
-              "calculate": "datum.Cell <= datum.FilledCount",
-              "as": "Filled"
-            }
-          ],
-          "facet": {
-            "row": {
-              "field": "Parameter",
-              "type": "nominal",
-              "title": null,
-              "header": {
-                "labelAngle": 0,
-                "labelFontSize": 12,
-                "labelFontWeight": "bold"
-              }
-            },
-            "column": {
-              "field": "Group",
-              "type": "nominal",
-              "title": null,
-              "sort": ["Quid Chewers", "Non-Quid Chewers"],
-              "header": {
-                "labelFontSize": 12,
-                "labelFontWeight": "bold"
-              }
-            }
-          },
-          "spec": {
-            "width": 130,
-            "height": 130,
-            "layer": [
-              {
-                "mark": {
-                  "type": "rect",
-                  "cornerRadius": 2,
-                  "stroke": "#ffffff",
-                  "strokeWidth": 1
-                },
-                "encoding": {
-                  "x": {
-                    "field": "Column",
-                    "type": "ordinal",
-                    "axis": null
-                  },
-                  "y": {
-                    "field": "Row",
-                    "type": "ordinal",
-                    "axis": null
-                  },
-                  "color": {
-                    "condition": {
-                      "test": "datum.Filled",
-                      "field": "Parameter",
-                      "type": "nominal",
-                      "scale": {
-                        "range": ["#d94801", "#3182bd"]
-                      }
-                    },
-                    "value": "#e8e8e8",
-                    "legend": null
-                  },
-                  "tooltip": [
+    "padding":  16,
+    "spacing":  24,
+    "vconcat":  [
                     {
-                      "field": "Parameter",
-                      "type": "nominal"
+                        "hconcat":  [
+                                        {
+                                            "title":  "INTRODUCTION: A REGIONAL BURDEN",
+                                            "width":  280,
+                                            "height":  360,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  360
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      360
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "The consumption of tobacco and",
+                                                                                        "areca nut is not merely an",
+                                                                                        "individual habit; it is a deeply",
+                                                                                        "entrenched public health crisis",
+                                                                                        "spanning South-East Asia and the",
+                                                                                        "Western Pacific. Global data",
+                                                                                        "reveals staggering regional",
+                                                                                        "prevalence rates, led by Bangladesh",
+                                                                                        "at 27.5%, followed closely by India",
+                                                                                        "(21.4%), Indonesia (21.0%), and",
+                                                                                        "Bhutan (19.7%). Even within the",
+                                                                                        "Western Pacific, countries like",
+                                                                                        "China present a significant",
+                                                                                        "prevalence of 12.9%. These figures",
+                                                                                        "highlight a widespread cultural",
+                                                                                        "acceptance that masks a severe,",
+                                                                                        "ongoing threat to oral health",
+                                                                                        "across borders."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "title":  "Prevalence by Country",
+                                            "width":  620,
+                                            "height":  360,
+                                            "data":  {
+                                                         "url":  "countries_data.json",
+                                                         "format":  {
+                                                                        "type":  "topojson",
+                                                                        "feature":  "1"
+                                                                    }
+                                                     },
+                                            "projection":  {
+                                                               "type":  "mercator",
+                                                               "center":  [
+                                                                              100,
+                                                                              20
+                                                                          ],
+                                                               "scale":  430
+                                                           },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "datum.properties.NAME == \u0027North Korea\u0027 ? \u0027Democratic People\\u2019s Republic of Korea\u0027 : datum.properties.NAME",
+                                                                  "as":  "CountryLookupName"
+                                                              },
+                                                              {
+                                                                  "lookup":  "CountryLookupName",
+                                                                  "from":  {
+                                                                               "data":  {
+                                                                                            "url":  "countries_data.csv"
+                                                                                        },
+                                                                               "key":  "ISO_A3",
+                                                                               "fields":  [
+                                                                                              "Region",
+                                                                                              "Prevalence"
+                                                                                          ]
+                                                                           }
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum.Prevalence)",
+                                                                  "as":  "PrevalenceValue"
+                                                              }
+                                                          ],
+                                            "layer":  [
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "geoshape",
+                                                                           "fill":  "#e6e6e6",
+                                                                           "stroke":  "#ffffff",
+                                                                           "strokeWidth":  0.6
+                                                                       }
+                                                          },
+                                                          {
+                                                              "transform":  [
+                                                                                {
+                                                                                    "filter":  "isValid(datum.PrevalenceValue)"
+                                                                                }
+                                                                            ],
+                                                              "mark":  {
+                                                                           "type":  "geoshape",
+                                                                           "stroke":  "#ffffff",
+                                                                           "strokeWidth":  0.7
+                                                                       },
+                                                              "encoding":  {
+                                                                               "color":  {
+                                                                                             "field":  "PrevalenceValue",
+                                                                                             "type":  "quantitative",
+                                                                                             "title":  "Prevalence",
+                                                                                             "scale":  {
+                                                                                                           "scheme":  "blues"
+                                                                                                       }
+                                                                                         },
+                                                                               "tooltip":  [
+                                                                                               {
+                                                                                                   "field":  "properties.NAME",
+                                                                                                   "type":  "nominal",
+                                                                                                   "title":  "Country"
+                                                                                               },
+                                                                                               {
+                                                                                                   "field":  "Region",
+                                                                                                   "type":  "nominal"
+                                                                                               },
+                                                                                               {
+                                                                                                   "field":  "PrevalenceValue",
+                                                                                                   "type":  "quantitative",
+                                                                                                   "title":  "Prevalence",
+                                                                                                   "format":  ".1f"
+                                                                                               }
+                                                                                           ]
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
                     },
                     {
-                      "field": "Group",
-                      "type": "nominal"
+                        "hconcat":  [
+                                        {
+                                            "title":  "Malaysia Overall Indicators",
+                                            "width":  620,
+                                            "height":  300,
+                                            "data":  {
+                                                         "url":  "malasyia_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "filter":  "datum.Group == \u0027Overall\u0027"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Value (%)\u0027])",
+                                                                  "as":  "Value"
+                                                              }
+                                                          ],
+                                            "mark":  {
+                                                         "type":  "arc",
+                                                         "innerRadius":  70,
+                                                         "outerRadius":  135,
+                                                         "stroke":  "#ffffff",
+                                                         "strokeWidth":  2
+                                                     },
+                                            "encoding":  {
+                                                             "theta":  {
+                                                                           "field":  "Value",
+                                                                           "type":  "quantitative",
+                                                                           "stack":  true
+                                                                       },
+                                                             "color":  {
+                                                                           "field":  "Parameter",
+                                                                           "type":  "nominal",
+                                                                           "legend":  {
+                                                                                          "title":  null,
+                                                                                          "orient":  "bottom"
+                                                                                      },
+                                                                           "scale":  {
+                                                                                         "scheme":  "blueorange"
+                                                                                     }
+                                                                       },
+                                                             "tooltip":  [
+                                                                             {
+                                                                                 "field":  "Parameter",
+                                                                                 "type":  "nominal"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Group",
+                                                                                 "type":  "nominal"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Value",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Value (%)",
+                                                                                 "format":  ".1f"
+                                                                             }
+                                                                         ]
+                                                         }
+                                        },
+                                        {
+                                            "title":  "THE LOCAL REALITY: MALAYSIA\u0027S DUAL CRISIS",
+                                            "width":  280,
+                                            "height":  300,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  300
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      300
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "When we zoom into Malaysia, the",
+                                                                                        "numbers paint a stark and troubling",
+                                                                                        "picture of substance dependency.",
+                                                                                        "The overall smoking rate stands at",
+                                                                                        "a massive 41.7%, while the",
+                                                                                        "traditional practice of betel quid",
+                                                                                        "chewing is close behind at 37.7%.",
+                                                                                        "This heavy dual consumption of",
+                                                                                        "smoked tobacco and chewed areca nut",
+                                                                                        "inflicts a severe physical toll on",
+                                                                                        "the population\u0027s oral health: more",
+                                                                                        "than one-fifth of Malaysians",
+                                                                                        "(20.3%) suffer from Oral Mucosal",
+                                                                                        "Lesions (OML), and an alarming 1.4%",
+                                                                                        "exhibit signs of Oral Pre-Cancer",
+                                                                                        "(OPC)."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
                     },
                     {
-                      "field": "Value",
-                      "type": "quantitative",
-                      "title": "Value (%)",
-                      "format": ".1f"
+                        "hconcat":  [
+                                        {
+                                            "title":  "THE TOXIC LINK: QUID CHEWING CONSEQUENCES",
+                                            "width":  280,
+                                            "height":  320,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  320
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      320
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "The direct medical consequence of",
+                                                                                        "quid chewing becomes undeniable",
+                                                                                        "when comparing user groups. Among",
+                                                                                        "those who chew betel quid, the",
+                                                                                        "prevalence of Oral Mucosal Lesions",
+                                                                                        "skyrockets to 35.6%, compared to",
+                                                                                        "just 11.0% among non-chewers. More",
+                                                                                        "critically, the risk of developing",
+                                                                                        "Oral Pre-Cancerous lesions",
+                                                                                        "increases significantly, rising",
+                                                                                        "from 1.2% in non-chewers to 1.9%",
+                                                                                        "among quid chewers. This clear",
+                                                                                        "disparity demonstrates that areca",
+                                                                                        "nut use serves as a fast track",
+                                                                                        "toward debilitating oral",
+                                                                                        "malignancies."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "title":  "OML and OPC Prevalence by Quid Chewing Status",
+                                            "data":  {
+                                                         "url":  "malasyia_details.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Value (%)\u0027])",
+                                                                  "as":  "Value"
+                                                              },
+                                                              {
+                                                                  "calculate":  "round(datum.Value)",
+                                                                  "as":  "FilledCount"
+                                                              },
+                                                              {
+                                                                  "calculate":  "sequence(1, 101)",
+                                                                  "as":  "WaffleCells"
+                                                              },
+                                                              {
+                                                                  "flatten":  [
+                                                                                  "WaffleCells"
+                                                                              ],
+                                                                  "as":  [
+                                                                             "Cell"
+                                                                         ]
+                                                              },
+                                                              {
+                                                                  "calculate":  "(datum.Cell - 1) % 10",
+                                                                  "as":  "Column"
+                                                              },
+                                                              {
+                                                                  "calculate":  "9 - floor((datum.Cell - 1) / 10)",
+                                                                  "as":  "Row"
+                                                              },
+                                                              {
+                                                                  "calculate":  "datum.Cell \u003c= datum.FilledCount",
+                                                                  "as":  "Filled"
+                                                              }
+                                                          ],
+                                            "facet":  {
+                                                          "row":  {
+                                                                      "field":  "Parameter",
+                                                                      "type":  "nominal",
+                                                                      "title":  null,
+                                                                      "header":  {
+                                                                                     "labelAngle":  0,
+                                                                                     "labelFontSize":  13,
+                                                                                     "labelFontWeight":  "bold"
+                                                                                 }
+                                                                  },
+                                                          "column":  {
+                                                                         "field":  "Group",
+                                                                         "type":  "nominal",
+                                                                         "title":  null,
+                                                                         "sort":  [
+                                                                                      "Quid Chewers",
+                                                                                      "Non-Quid Chewers"
+                                                                                  ],
+                                                                         "header":  {
+                                                                                        "labelFontSize":  13,
+                                                                                        "labelFontWeight":  "bold"
+                                                                                    }
+                                                                     }
+                                                      },
+                                            "spec":  {
+                                                         "width":  105,
+                                                         "height":  105,
+                                                         "layer":  [
+                                                                       {
+                                                                           "mark":  {
+                                                                                        "type":  "rect",
+                                                                                        "cornerRadius":  2,
+                                                                                        "stroke":  "#ffffff",
+                                                                                        "strokeWidth":  1
+                                                                                    },
+                                                                           "encoding":  {
+                                                                                            "x":  {
+                                                                                                      "field":  "Column",
+                                                                                                      "type":  "ordinal",
+                                                                                                      "axis":  null
+                                                                                                  },
+                                                                                            "y":  {
+                                                                                                      "field":  "Row",
+                                                                                                      "type":  "ordinal",
+                                                                                                      "axis":  null
+                                                                                                  },
+                                                                                            "color":  {
+                                                                                                          "condition":  {
+                                                                                                                            "test":  "datum.Filled",
+                                                                                                                            "field":  "Parameter",
+                                                                                                                            "type":  "nominal",
+                                                                                                                            "scale":  {
+                                                                                                                                          "scheme":  "blueorange"
+                                                                                                                                      }
+                                                                                                                        },
+                                                                                                          "value":  "#e8e8e8"
+                                                                                                      },
+                                                                                            "tooltip":  [
+                                                                                                            {
+                                                                                                                "field":  "Parameter",
+                                                                                                                "type":  "nominal"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "field":  "Group",
+                                                                                                                "type":  "nominal"
+                                                                                                            },
+                                                                                                            {
+                                                                                                                "field":  "Value",
+                                                                                                                "type":  "quantitative",
+                                                                                                                "title":  "Value (%)",
+                                                                                                                "format":  ".1f"
+                                                                                                            }
+                                                                                                        ]
+                                                                                        }
+                                                                       },
+                                                                       {
+                                                                           "transform":  [
+                                                                                             {
+                                                                                                 "filter":  "datum.Cell == 1"
+                                                                                             }
+                                                                                         ],
+                                                                           "mark":  {
+                                                                                        "type":  "text",
+                                                                                        "fontSize":  22,
+                                                                                        "fontWeight":  "bold",
+                                                                                        "dy":  66,
+                                                                                        "color":  "#333333"
+                                                                                    },
+                                                                           "encoding":  {
+                                                                                            "text":  {
+                                                                                                         "field":  "Value",
+                                                                                                         "type":  "quantitative",
+                                                                                                         "format":  ".1f"
+                                                                                                     }
+                                                                                        }
+                                                                       }
+                                                                   ]
+                                                     },
+                                            "resolve":  {
+                                                            "scale":  {
+                                                                          "x":  "independent",
+                                                                          "y":  "independent"
+                                                                      }
+                                                        }
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "THE GENDER GAP",
+                                            "width":  280,
+                                            "height":  260,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  260
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      260
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "The crisis is heavily gendered. Men",
+                                                                                        "bear the brunt of the epidemic with",
+                                                                                        "a prevalence rate of 6.7%, nearly",
+                                                                                        "five times higher than that of",
+                                                                                        "women (1.4%)."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "title":  "Prevalence by Gender",
+                                            "width":  620,
+                                            "height":  260,
+                                            "data":  {
+                                                         "url":  "gender_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Prevalence (%)\u0027])",
+                                                                  "as":  "Prevalence"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Unweighted Count\u0027])",
+                                                                  "as":  "UnweightedCount"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Estimated Population\u0027])",
+                                                                  "as":  "EstimatedPopulation"
+                                                              }
+                                                          ],
+                                            "mark":  {
+                                                         "type":  "bar",
+                                                         "size":  34,
+                                                         "cornerRadiusTopLeft":  3,
+                                                         "cornerRadiusTopRight":  3,
+                                                         "color":  "#0072B2"
+                                                     },
+                                            "encoding":  {
+                                                             "x":  {
+                                                                       "field":  "Category",
+                                                                       "type":  "ordinal",
+                                                                       "title":  "Gender",
+                                                                       "sort":  [
+                                                                                    "OVERALL",
+                                                                                    "Male",
+                                                                                    "Female"
+                                                                                ],
+                                                                       "axis":  {
+                                                                                    "labelAngle":  0
+                                                                                }
+                                                                   },
+                                                             "y":  {
+                                                                       "field":  "Prevalence",
+                                                                       "type":  "quantitative",
+                                                                       "title":  "Prevalence (%)",
+                                                                       "scale":  {
+                                                                                     "zero":  true
+                                                                                 }
+                                                                   },
+                                                             "tooltip":  [
+                                                                             {
+                                                                                 "field":  "Category",
+                                                                                 "type":  "nominal",
+                                                                                 "title":  "Gender"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Prevalence",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Prevalence (%)",
+                                                                                 "format":  ".1f"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "UnweightedCount",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Unweighted Count"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "EstimatedPopulation",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Estimated Population",
+                                                                                 "format":  ","
+                                                                             }
+                                                                         ]
+                                                         }
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "Prevalence by Age Group",
+                                            "width":  620,
+                                            "height":  260,
+                                            "data":  {
+                                                         "url":  "age_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Prevalence (%)\u0027])",
+                                                                  "as":  "Prevalence"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Unweighted Count\u0027])",
+                                                                  "as":  "UnweightedCount"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Estimated Population\u0027])",
+                                                                  "as":  "EstimatedPopulation"
+                                                              }
+                                                          ],
+                                            "mark":  {
+                                                         "type":  "bar",
+                                                         "cornerRadiusTopLeft":  3,
+                                                         "cornerRadiusTopRight":  3,
+                                                         "color":  "#0072B2"
+                                                     },
+                                            "encoding":  {
+                                                             "x":  {
+                                                                       "field":  "Category",
+                                                                       "type":  "ordinal",
+                                                                       "title":  "Age Group",
+                                                                       "sort":  [
+                                                                                    "15-19",
+                                                                                    "20-29",
+                                                                                    "30-39",
+                                                                                    "40-49",
+                                                                                    "50-59",
+                                                                                    "60-69"
+                                                                                ],
+                                                                       "axis":  {
+                                                                                    "labelAngle":  0
+                                                                                }
+                                                                   },
+                                                             "y":  {
+                                                                       "field":  "Prevalence",
+                                                                       "type":  "quantitative",
+                                                                       "title":  "Prevalence (%)",
+                                                                       "scale":  {
+                                                                                     "zero":  true
+                                                                                 }
+                                                                   },
+                                                             "tooltip":  [
+                                                                             {
+                                                                                 "field":  "Category",
+                                                                                 "type":  "nominal",
+                                                                                 "title":  "Age Group"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Prevalence",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Prevalence (%)",
+                                                                                 "format":  ".1f"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "UnweightedCount",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Unweighted Count"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "EstimatedPopulation",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Estimated Population",
+                                                                                 "format":  ","
+                                                                             }
+                                                                         ]
+                                                         }
+                                        },
+                                        {
+                                            "title":  "THE YOUTH CRISIS",
+                                            "width":  280,
+                                            "height":  260,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  260
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      260
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "Contrary to the belief that areca",
+                                                                                        "nut and tobacco use are dying",
+                                                                                        "traditions confined to the elderly,",
+                                                                                        "the data reveals a terrifying",
+                                                                                        "trend: the highest prevalence is",
+                                                                                        "concentrated in the younger",
+                                                                                        "generation. Youth aged 15-19 lead",
+                                                                                        "with a 5.9% prevalence, followed",
+                                                                                        "closely by young adults aged 20-29",
+                                                                                        "at 5.6%. This indicates a fresh",
+                                                                                        "wave of addiction among the",
+                                                                                        "workforce of tomorrow."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "Locality Comparison",
+                                            "width":  620,
+                                            "height":  280,
+                                            "data":  {
+                                                         "url":  "locality_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Estimated Population\u0027])",
+                                                                  "as":  "EstimatedPopulation"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Prevalence (%)\u0027])",
+                                                                  "as":  "Prevalence"
+                                                              }
+                                                          ],
+                                            "layer":  [
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "bar",
+                                                                           "size":  28,
+                                                                           "xOffset":  -16,
+                                                                           "cornerRadiusTopLeft":  3,
+                                                                           "cornerRadiusTopRight":  3,
+                                                                           "color":  "#0072B2"
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "Category",
+                                                                                         "type":  "nominal",
+                                                                                         "title":  "Locality",
+                                                                                         "sort":  [
+                                                                                                      "Urban",
+                                                                                                      "Fringe",
+                                                                                                      "Remote"
+                                                                                                  ],
+                                                                                         "axis":  {
+                                                                                                      "labelAngle":  0
+                                                                                                  }
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "field":  "Prevalence",
+                                                                                         "type":  "quantitative",
+                                                                                         "title":  "Prevalence (%)",
+                                                                                         "scale":  {
+                                                                                                       "zero":  true
+                                                                                                   }
+                                                                                     },
+                                                                               "tooltip":  [
+                                                                                               {
+                                                                                                   "field":  "Category",
+                                                                                                   "type":  "nominal",
+                                                                                                   "title":  "Locality"
+                                                                                               },
+                                                                                               {
+                                                                                                   "field":  "Prevalence",
+                                                                                                   "type":  "quantitative",
+                                                                                                   "title":  "Prevalence (%)",
+                                                                                                   "format":  ".1f"
+                                                                                               }
+                                                                                           ]
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "bar",
+                                                                           "size":  28,
+                                                                           "xOffset":  16,
+                                                                           "cornerRadiusTopLeft":  3,
+                                                                           "cornerRadiusTopRight":  3,
+                                                                           "color":  "#E69F00"
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "Category",
+                                                                                         "type":  "nominal",
+                                                                                         "title":  "Locality",
+                                                                                         "sort":  [
+                                                                                                      "Urban",
+                                                                                                      "Fringe",
+                                                                                                      "Remote"
+                                                                                                  ],
+                                                                                         "axis":  {
+                                                                                                      "labelAngle":  0
+                                                                                                  }
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "field":  "EstimatedPopulation",
+                                                                                         "type":  "quantitative",
+                                                                                         "title":  "Estimated Population",
+                                                                                         "axis":  {
+                                                                                                      "orient":  "right",
+                                                                                                      "format":  ","
+                                                                                                  },
+                                                                                         "scale":  {
+                                                                                                       "zero":  true
+                                                                                                   }
+                                                                                     },
+                                                                               "tooltip":  [
+                                                                                               {
+                                                                                                   "field":  "Category",
+                                                                                                   "type":  "nominal",
+                                                                                                   "title":  "Locality"
+                                                                                               },
+                                                                                               {
+                                                                                                   "field":  "EstimatedPopulation",
+                                                                                                   "type":  "quantitative",
+                                                                                                   "title":  "Estimated Population",
+                                                                                                   "format":  ","
+                                                                                               }
+                                                                                           ]
+                                                                           }
+                                                          }
+                                                      ],
+                                            "resolve":  {
+                                                            "scale":  {
+                                                                          "y":  "independent"
+                                                                      }
+                                                        }
+                                        },
+                                        {
+                                            "title":  "THE URBAN SURGE",
+                                            "width":  280,
+                                            "height":  280,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  280
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "In a surprising reversal of",
+                                                                                        "conventional wisdom that associates",
+                                                                                        "quid chewing with remote rural",
+                                                                                        "traditions, urban environments",
+                                                                                        "exhibit the highest prevalence at a",
+                                                                                        "staggering 10.0%. In comparison,",
+                                                                                        "rural fringes stand at 3.9%, and",
+                                                                                        "remote communities report only",
+                                                                                        "2.5%. The urban lifestyle and",
+                                                                                        "stress may be modernizing and",
+                                                                                        "accelerating these habits."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "HOUSEHOLD INCOME: WIDESPREAD RISK",
+                                            "width":  280,
+                                            "height":  300,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  300
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      300
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "The habit does not discriminate by",
+                                                                                        "income. It remains consistently",
+                                                                                        "widespread across almost all wealth",
+                                                                                        "quintiles, maintaining a high",
+                                                                                        "prevalence of around 4.0% to 4.2%",
+                                                                                        "even among the middle-to-wealthiest",
+                                                                                        "households (Quintiles 3, 4, and 5)."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        },
+                                        {
+                                            "title":  "Prevalence by Household Income Quintile",
+                                            "width":  620,
+                                            "height":  300,
+                                            "data":  {
+                                                         "url":  "HIQ_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Prevalence (%)\u0027])",
+                                                                  "as":  "Prevalence"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Unweighted Count\u0027])",
+                                                                  "as":  "UnweightedCount"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Estimated Population\u0027])",
+                                                                  "as":  "EstimatedPopulation"
+                                                              }
+                                                          ],
+                                            "mark":  {
+                                                         "type":  "line",
+                                                         "point":  {
+                                                                       "filled":  true,
+                                                                       "size":  90
+                                                                   },
+                                                         "strokeWidth":  3,
+                                                         "color":  "#0072B2"
+                                                     },
+                                            "encoding":  {
+                                                             "x":  {
+                                                                       "field":  "Category",
+                                                                       "type":  "ordinal",
+                                                                       "title":  "Household Income Quintile",
+                                                                       "sort":  [
+                                                                                    "Quintile 1 (20% poorest)",
+                                                                                    "Quintile 2",
+                                                                                    "Quintile 3",
+                                                                                    "Quintile 4",
+                                                                                    "Quintile 5 (20% richest)"
+                                                                                ],
+                                                                       "axis":  {
+                                                                                    "labelAngle":  -25,
+                                                                                    "labelLimit":  120
+                                                                                }
+                                                                   },
+                                                             "y":  {
+                                                                       "field":  "Prevalence",
+                                                                       "type":  "quantitative",
+                                                                       "title":  "Prevalence (%)",
+                                                                       "scale":  {
+                                                                                     "zero":  true
+                                                                                 }
+                                                                   },
+                                                             "tooltip":  [
+                                                                             {
+                                                                                 "field":  "Category",
+                                                                                 "type":  "nominal"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Prevalence",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Prevalence (%)",
+                                                                                 "format":  ".1f"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "UnweightedCount",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Unweighted Count"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "EstimatedPopulation",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Estimated Population",
+                                                                                 "format":  ","
+                                                                             }
+                                                                         ]
+                                                         }
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "Prevalence by Occupation",
+                                            "width":  620,
+                                            "height":  260,
+                                            "data":  {
+                                                         "url":  "occupation_data.csv"
+                                                     },
+                                            "transform":  [
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Prevalence (%)\u0027])",
+                                                                  "as":  "Prevalence"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Unweighted Count\u0027])",
+                                                                  "as":  "UnweightedCount"
+                                                              },
+                                                              {
+                                                                  "calculate":  "toNumber(datum[\u0027Estimated Population\u0027])",
+                                                                  "as":  "EstimatedPopulation"
+                                                              }
+                                                          ],
+                                            "mark":  {
+                                                         "type":  "bar",
+                                                         "cornerRadiusEnd":  3,
+                                                         "color":  "#0072B2"
+                                                     },
+                                            "encoding":  {
+                                                             "x":  {
+                                                                       "field":  "Prevalence",
+                                                                       "type":  "quantitative",
+                                                                       "title":  "Prevalence (%)",
+                                                                       "scale":  {
+                                                                                     "zero":  true
+                                                                                 }
+                                                                   },
+                                                             "y":  {
+                                                                       "field":  "Category",
+                                                                       "type":  "nominal",
+                                                                       "title":  null,
+                                                                       "sort":  "-x"
+                                                                   },
+                                                             "tooltip":  [
+                                                                             {
+                                                                                 "field":  "Category",
+                                                                                 "type":  "nominal",
+                                                                                 "title":  "Occupation"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "Prevalence",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Prevalence (%)",
+                                                                                 "format":  ".1f"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "UnweightedCount",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Unweighted Count"
+                                                                             },
+                                                                             {
+                                                                                 "field":  "EstimatedPopulation",
+                                                                                 "type":  "quantitative",
+                                                                                 "title":  "Estimated Population",
+                                                                                 "format":  ","
+                                                                             }
+                                                                         ]
+                                                         }
+                                        },
+                                        {
+                                            "title":  "OCCUPATIONAL EXPOSURE",
+                                            "width":  280,
+                                            "height":  260,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  280,
+                                                                                              "y":  0,
+                                                                                              "y2":  260
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      280
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      260
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  11,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "Occupationally, the highest",
+                                                                                        "prevalence is seen among the",
+                                                                                        "Employed (4.8%) and",
+                                                                                        "Students/Children (4.0%), proving",
+                                                                                        "that active, productive segments of",
+                                                                                        "society are the most exposed."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
+                    },
+                    {
+                        "hconcat":  [
+                                        {
+                                            "title":  "CONCLUSION: A CALL FOR TARGETED ACTION",
+                                            "width":  940,
+                                            "height":  150,
+                                            "layer":  [
+                                                          {
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+                                                                                              "x":  0,
+                                                                                              "x2":  940,
+                                                                                              "y":  0,
+                                                                                              "y2":  150
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "mark":  {
+                                                                           "type":  "rect",
+                                                                           "fill":  "transparent",
+                                                                           "stroke":  "#a8a8a8",
+                                                                           "strokeDash":  [
+                                                                                              6,
+                                                                                              6
+                                                                                          ],
+                                                                           "strokeWidth":  1
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "field":  "x",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      940
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "x2":  {
+                                                                                          "field":  "x2"
+                                                                                      },
+                                                                               "y":  {
+                                                                                         "field":  "y",
+                                                                                         "type":  "quantitative",
+                                                                                         "axis":  null,
+                                                                                         "scale":  {
+                                                                                                       "domain":  [
+                                                                                                                      0,
+                                                                                                                      150
+                                                                                                                  ]
+                                                                                                   }
+                                                                                     },
+                                                                               "y2":  {
+                                                                                          "field":  "y2"
+                                                                                      }
+                                                                           }
+                                                          },
+                                                          {
+                                                              "mark":  {
+                                                                           "type":  "text",
+                                                                           "align":  "left",
+                                                                           "baseline":  "top",
+                                                                           "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                                                           "fontSize":  12,
+                                                                           "color":  "#333333",
+                                                                           "text":  [
+                                                                                        "This narrative shifts our entire understanding of the oral health crisis. The data tells a story of an epidemic that is",
+                                                                                        "migrating into urban centers, capturing the youth, and strongly anchoring itself among the working male population. To combat",
+                                                                                        "the rising tides of oral mucosal lesions and pre-cancer, healthcare strategies must move away from generic campaigns and",
+                                                                                        "focus heavily on urban youth spaces, workplace wellness initiatives, and targeted male-centric public health interventions.",
+                                                                                        "Without immediate action, the cultural habits of today will inevitably become the oncology statistics of tomorrow."
+                                                                                    ],
+                                                                           "dx":  14,
+                                                                           "dy":  14
+                                                                       },
+                                                              "data":  {
+                                                                           "values":  [
+                                                                                          {
+
+                                                                                          }
+                                                                                      ]
+                                                                       },
+                                                              "encoding":  {
+                                                                               "x":  {
+                                                                                         "value":  0
+                                                                                     },
+                                                                               "y":  {
+                                                                                         "value":  0
+                                                                                     }
+                                                                           }
+                                                          }
+                                                      ]
+                                        }
+                                    ]
                     }
-                  ]
-                }
-              },
-              {
-                "transform": [
-                  {
-                    "filter": "datum.Cell == 1"
-                  }
                 ],
-                "mark": {
-                  "type": "text",
-                  "fontSize": 20,
-                  "fontWeight": "bold",
-                  "dy": 84,
-                  "color": "#333333"
+    "resolve":  {
+                    "scale":  {
+                                  "color":  "independent",
+                                  "x":  "independent",
+                                  "y":  "independent"
+                              }
                 },
-                "encoding": {
-                  "text": {
-                    "field": "Value",
-                    "type": "quantitative",
-                    "format": ".1f"
-                  }
-                }
-              }
-            ]
-          },
-          "resolve": {
-            "scale": {
-              "x": "independent",
-              "y": "independent"
-            }
-          }
-        },
-        {
-          "width": 300,
-          "height": 350,
-          "data": {
-            "values": [{"start": 0, "end": 1}]
-          },
-          "mark": {
-            "type": "rect",
-            "fill": "#fafafa",
-            "stroke": "#d8d8d8",
-            "strokeWidth": 1
-          },
-          "encoding": {
-            "x": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "x2": {"field": "end"},
-            "y": {
-              "field": "start",
-              "type": "quantitative",
-              "axis": null,
-              "scale": {"domain": [0, 1]}
-            },
-            "y2": {"field": "end"}
-          }
-        }
-      ]
-    }
-  ],
-  "resolve": {
-    "scale": {
-      "color": "independent"
-    }
-  },
-  "config": {
-    "view": {
-      "stroke": null
-    },
-    "concat": {
-      "spacing": 36
-    },
-    "axis": {
-      "labelFontSize": 11,
-      "titleFontSize": 12
-    }
-  }
+    "config":  {
+                   "view":  {
+                                "stroke":  null
+                            },
+                   "concat":  {
+                                  "spacing":  18
+                              },
+                   "axis":  {
+                                "labelFontSize":  11,
+                                "titleFontSize":  12,
+                                "gridColor":  "#e6e6e6",
+                                "domainColor":  "#bdbdbd",
+                                "tickColor":  "#bdbdbd",
+                                "labelFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                "titleFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif"
+                            },
+                   "title":  {
+                                 "font":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                 "subtitleFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                 "color":  "#111111",
+                                 "subtitleColor":  "#555555",
+                                 "fontSize":  24,
+                                 "subtitleFontSize":  14
+                             },
+                   "legend":  {
+                                  "labelFontSize":  11,
+                                  "titleFontSize":  12,
+                                  "labelFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                  "titleFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif"
+                              },
+                   "header":  {
+                                  "labelFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif",
+                                  "titleFont":  "Inter, \u0027Helvetica Neue\u0027, Arial, sans-serif"
+                              }
+               }
 }

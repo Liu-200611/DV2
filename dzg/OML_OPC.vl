@@ -84,7 +84,7 @@
               "field": "Parameter",
               "type": "nominal",
               "scale": {
-                "range": ["#d94801", "#3182bd"]
+                "scheme": "blueorange"
               }
             },
             "value": "#e8e8e8"
@@ -142,6 +142,30 @@
     },
     "concat": {
       "spacing": 24
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "header": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif"
     }
   }
 }

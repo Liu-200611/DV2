@@ -4,7 +4,7 @@
   "width": 800,
   "height": 500,
   "data": {
-    "url": "countries.json",
+    "url": "countries_data.json",
     "format": {
       "type": "topojson",
       "feature": "1"
@@ -61,7 +61,7 @@
           "type": "quantitative",
           "title": "Prevalence",
           "scale": {
-            "scheme": "orangered"
+            "scheme": "blues"
           }
         },
         "tooltip": [
@@ -87,6 +87,26 @@
   "config": {
     "view": {
       "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
     }
   }
 }

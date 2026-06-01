@@ -1,0 +1,139 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Locality Comparison",
+  "width": 650,
+  "height": 320,
+  "data": {
+    "url": "locality_data.csv"
+  },
+  "transform": [
+    {
+      "calculate": "toNumber(datum['Estimated Population'])",
+      "as": "EstimatedPopulation"
+    },
+    {
+      "calculate": "toNumber(datum['Prevalence (%)'])",
+      "as": "Prevalence"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "bar",
+        "size": 28,
+        "xOffset": -16,
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3,
+        "color": "#3182bd"
+      },
+      "encoding": {
+        "x": {
+          "field": "Category",
+          "type": "nominal",
+          "title": "Locality",
+          "sort": ["Urban", "Fringe", "Remote"],
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "Prevalence",
+          "type": "quantitative",
+          "title": "Prevalence (%)",
+          "scale": {
+            "zero": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "Locality"
+          },
+          {
+            "field": "Prevalence",
+            "type": "quantitative",
+            "title": "Prevalence (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "bar",
+        "size": 28,
+        "xOffset": 16,
+        "cornerRadiusTopLeft": 3,
+        "cornerRadiusTopRight": 3,
+        "color": "#f16913"
+      },
+      "encoding": {
+        "x": {
+          "field": "Category",
+          "type": "nominal",
+          "title": "Locality",
+          "sort": ["Urban", "Fringe", "Remote"],
+          "axis": {
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "EstimatedPopulation",
+          "type": "quantitative",
+          "title": "Estimated Population",
+          "axis": {
+            "orient": "right",
+            "format": ",d"
+          },
+          "scale": {
+            "zero": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Category",
+            "type": "nominal",
+            "title": "Locality"
+          },
+          {
+            "field": "EstimatedPopulation",
+            "type": "quantitative",
+            "title": "Estimated Population",
+            "format": ","
+          }
+        ]
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "y": "independent"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "axis": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    },
+    "title": {
+      "font": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "fontSize": 24,
+      "color": "#111111",
+      "subtitleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "subtitleFontSize": 14,
+      "subtitleColor": "#555555"
+    },
+    "legend": {
+      "labelFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "titleFont": "Inter, 'Helvetica Neue', Arial, sans-serif",
+      "labelFontSize": 11,
+      "titleFontSize": 12
+    }
+  }
+}
